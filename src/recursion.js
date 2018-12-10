@@ -7,31 +7,81 @@
 // Example: 5! = 5 x 4 x 3 x 2 x 1 = 120
 // factorial(5); // 120
 var factorial = function(n) {
-};
+  if (n < 0) {
+    return -1;
+  }
+  if (n === 0) {
+    return 1;
+  }
+  return (n * factorial(n - 1));
+}
+
 
 // 2. Compute the sum of an array of integers.
 // sum([1,2,3,4,5,6]); // 21
 var sum = function(array) {
+  if (array.length === 1) {
+  	return array[0];
+  } else {
+  	return array[0] + sum(array.slice(1, array.length));
+  };
 };
+
 
 // 3. Sum all numbers in an array containing nested arrays.
 // arraySum([1,[2,3],[[4]],5]); // 15
-var arraySum = function(array) {
+var sum = function(array) {
+	if (Array.isArray(array[0])) {
+    var leftSum = sum(array[0]);
+  } else {
+    var leftSum = array[0];
+  }
+  if (array.length > 1) { 
+		return leftSum + sum(array.slice(1, array.length));
+	} else {
+    return leftSum;
+  }
 };
 
 // 4. Check if a number is even.
-var isEven = function(n) {
+var isEven = function(n) { 
+  if (n === 2) {
+  	return true;
+  } else if (n === 1) {
+    return false;
+  } else {
+  	return isEven(n-2);
+  }
 };
 
 // 5. Sum all integers below a given integer.
 // sumBelow(10); // 45
 // sumBelow(7); // 21
 var sumBelow = function(n) {
+	if (n <= 1) {
+		return 0;
+	} else if (n === 2) {
+		return 1; 
+	} else {
+		return (n - 1) + sumBelow(n - 1);
+	}
 };
 
 // 6. Get the integers within a range (x, y).
 // range(2,9); // [3,4,5,6,7,8]
 var range = function(x, y) {
+	//return an array
+	//the length will be (y-x)-1
+	//if y-x === 1, return [];
+	//if y-x === 2, return array of 1 element, (y-1)
+	//else range is array of 1 element plus the range(x+1, y)
+	if ((y - x) === 1) {
+		return [];
+  } else if ((y - x) === 2) {
+    return [y - 1]; 
+	} else {
+		return [x + 1].concat(range((x + 1), y))  
+	}
 };
 
 // 7. Compute the exponent of a number.
@@ -40,21 +90,74 @@ var range = function(x, y) {
 // exponent(4,3); // 64
 // https://www.khanacademy.org/computing/computer-science/algorithms/recursive-algorithms/a/computing-powers-of-a-number
 var exponent = function(base, exp) {
+	if (exp < 0) {
+		exp = Math.abs(exp);
+		var isNeg = true;
+	}
+	if (exp === 0) {
+		return 1;
+	} else if (exp % 2 === 0 && exp > 0) {
+		var y = exponent(base, (exp / 2));
+		var result = y * y; 
+	} else if (exp % 2 === 1 && exp > 0) {
+		var result = exponent(base, exp - 1) * base;
+	} 
+	if (isNeg) {
+    result = 1 / result;
+	}
+	return result;
 };
+
+
 
 // 8. Determine if a number is a power of two.
 // powerOfTwo(1); // true
 // powerOfTwo(16); // true
 // powerOfTwo(10); // false
+//1, 2, 4, 8, 16, 32, 64, 128, 256 //n is positive
+//.5, .25, .125, .0625, .03125 //n is negative
 var powerOfTwo = function(n) {
+  if (n < 0) {
+		return false;
+	} else if (n === 1 || n === 2) {
+		return true;
+	} else if (n % 2 === 1) {
+		return false;
+	} else if (n > 2) {
+		return powerOfTwo(n / 2);
+	} else if (n > 0 && n < 1) {
+		if ((1/n) % 2 === 0) {
+      return powerOfTwo(1/n);
+	  } else {
+      return false;
+    }
+  }
 };
 
 // 9. Write a function that reverses a string.
+//"hello" = "olleh"
+//base case is returning string[0] when length is 1
 var reverse = function(string) {
+  if (string.length === 1) {
+  	return string[0];
+  } else {
+  	return string.slice(-1).concat(reverse(string.slice(0, string.length - 1)));
+  }
 };
 
 // 10. Write a function that determines if a string is a palindrome.
+//single letter palindrome
+//double letter palindrome
 var palindrome = function(string) {
+  if (string.length === 0 || string.length === 1) {
+    return true;
+  } else {
+    if (string[0] === string[string.length-1]) {
+    	return palindrome(string.slice(1, string.length-1));
+    } else {
+    	return false; 
+    }
+  }
 };
 
 // 11. Write a function that returns the remainder of x divided by y without using the
